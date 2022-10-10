@@ -1,0 +1,179 @@
+openapi: 3.0.3
+info:
+  title: タスク管理API
+  description: タスク管理のAPI定義
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: ローカル環境
+tags:
+  - name: task
+paths:
+  /task:
+    post:
+      tags:
+        - task
+      summary: taskを登録
+      description: 新しいtaskを登録します
+      operationId: addTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequest'
+        required: true
+      responses:
+        '200':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'          
+        '400':
+          description: 不正な入力値
+        '500':
+          description: サーバーエラー
+    put:
+      tags:
+        - task
+      summary: taskを更新
+      description: taskを更新します
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRequest'
+        required: true
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'          
+        '400':
+          description: 不正な入力値
+        '500':
+          description: サーバーエラー
+  /task/{id}:
+    get:
+      tags:
+        - task
+      summary: taskを取得
+      description: idを指定してtaskを取得します
+      operationId: getTask
+      parameters:
+        - name: id
+          in: path
+          description: taskのid
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'          
+        '400':
+          description: 不正な入力値
+        '500':
+          description: サーバーエラー
+    delete:
+      tags:
+        - task
+      summary: taskを削除
+      description: taskを削除します
+      parameters: 
+        - name: id
+          in: path
+          description: taskのid
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 削除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'          
+        '400':
+          description: 不正な入力値
+        '500':
+          description: サーバーエラー
+  /tasks:
+    get:
+      tags:
+        - task
+      summary: ユーザーのtaskを取得
+      description: userIdを指定してユーザーが所持しているtaskを全て取得します
+      operationId: findTasks
+      parameters:
+        - name: userId
+          in: query
+          description: ユーザーID
+          required: true
+          explode: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: 不正な入力値
+        '500':
+          description: サーバーエラー
+components:
+  schemas:
+    TaskRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 198772
+        taskname:
+          type: string
+      required:
+        - userId
+        - taskname
+    TaskResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        userId:
+          type: integer
+          format: int64
+          example: 198772
+        taskname:
+          type: string
+        enddate:
+          type: string
+          format: date
+        description:
+          type: string
+        status: 
+          type: string
+        priority:
+          type: integer
+      required:
+        - id
+        - userId
+        - taskname
+        - enddate
+        - description
+        - status
+        - priority
