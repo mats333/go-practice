@@ -38,6 +38,7 @@ paths:
         - task
       summary: taskを更新
       description: taskを更新します
+      operationId: putTask
       requestBody:
         content:
           application/json:
@@ -86,6 +87,7 @@ paths:
         - task
       summary: taskを削除
       description: taskを削除します
+      operationId: deleteTask
       parameters: 
         - name: id
           in: path
@@ -96,11 +98,7 @@ paths:
             format: int64
       responses:
         '200':
-          description: 削除成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TaskResponse'          
+          description: 削除成功         
         '400':
           description: 不正な入力値
         '500':
@@ -144,6 +142,15 @@ components:
           example: 198772
         taskname:
           type: string
+        enddate:
+          type: string
+          format: date
+        description:
+          type: string
+        status: 
+          type: string
+        priority:
+          type: integer
       required:
         - userId
         - taskname
